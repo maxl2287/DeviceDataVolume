@@ -461,8 +461,10 @@ components:
 
     Treshold:
       description: A treshold for the used data volume in percent. When this value is reached then the notification will be send to the consumer.
-      type: string
-      example: "80"
+      type: integer
+      minimum: 0
+      maximum: 100
+      example: 80
 
     Device:
       description: |
@@ -1136,7 +1138,7 @@ components:
           subscriptionDetail:
             device:
               phoneNumber: "+12345678912"
-            treshold: "80"
+            treshold: 80
           initialEvent: true
           subscriptionMaxEvents: 10
           subscriptionExpireTime: 2024-03-22T05:40:58.469Z
