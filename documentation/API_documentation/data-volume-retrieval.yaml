@@ -3,7 +3,6 @@ info:
   title: Device Data Volume
   description: |
     This API offers detailed insights into the customer's data usage status, including whether they have remaining data volume available and their current position within that volume allocation. 
-    It accurately determines whether the customer is nearing the beginning or the end of their allocated data volume, providing valuable information for managing data usage efficiently.
 
     # Further info and support
 
@@ -34,7 +33,7 @@ paths:
         - Device Data Volume Retrieval
       summary: Retrieve the remaining data volume for the device
       description: |
-        Retrieves the remaining data volume for the device based on the contract.
+        Retrieves the remaining data volume for the device.
       operationId: retrieveRemainingDataVolume
       parameters:
         - $ref: '#/components/parameters/x-correlator'
@@ -88,6 +87,7 @@ components:
         type: string
 
   schemas:
+
     RequestRemainingDataVolume:
       description: |
         The request to retrieve the remaining data volume for a device.
@@ -99,16 +99,45 @@ components:
         - device
 
     RemainingDataVolumeResponse:
-      description: |
-        The response including an estimated indicator, e.g. <300mb .
+      description: The response including information about the remaining data volume.
       type: object
       properties:
+        status:
+          $ref: "#/components/schemas/Status"
+        lastStatusTime:
+          $ref: "#/components/schemas/LastStatusTime"
         remainingVolume:
-          description: An estimated indicator to identify, how many data volume is left for the device.
-          type: string
-          example: "<1GB"
+          $ref: "#/components/schemas/RemainingVolume"
       required:
-        - remainingVolume
+        - status
+
+    Status:
+      description: The current status of the data volume availability.
+      type: string
+      enum:
+        - AVAILABLE
+        - UNAVAILABLE
+      example: AVAILABLE
+
+    RemainingVolume:
+      properties:
+        value:
+          description: The remaining data volume for the device.
+          type: number
+          minimum: 0
+          example: 200
+        unit:
+          $ref: "#/components/schemas/ByteUnit"
+
+    ByteUnit:
+      description: The indicator for the data volume units presented in bytes.
+      type: string
+      enum:
+        - KB
+        - MB
+        - GB
+      example: MB
+
     Device:
       description: |
         End-user equipment able to connect to a mobile network. Examples of devices include smartphones or IoT sensors/actuators.
